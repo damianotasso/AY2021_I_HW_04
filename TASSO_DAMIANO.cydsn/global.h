@@ -16,19 +16,21 @@
     
     #define POTENTIOMETER 0
     #define PHOTORESISTOR 1
-    #define TRANSMIT_BUFFER_SIZE 16
+    #define FSR 65535
+    #define THRESHOLD 0.3*FSR 
+    #define BYTE_TO_SEND 2
+    #define TRANSMIT_BUFFER_SIZE 1+BYTE_TO_SEND+1
     #define HEADER 0xA0
     #define TAIL 0xC0
-    /*#define START 'B' || 'b'
-    #define FINISH 'S' || 's'*/
     
-    int32 value_digit_photo;
-    int32 value_mv_photo;
-    int32 value_digit_pot;
-    int32 value_mv_pot;
+    int32 value_photo;
+    int32 value_pot;
     uint8_t received;
-    volatile uint8_t flag;
-    char DataBuffer[TRANSMIT_BUFFER_SIZE];
+    volatile uint8_t flag_photo;
+    volatile uint8_t flag_pot;
+    volatile uint8_t flag_start;
+    uint8_t Data_photo[TRANSMIT_BUFFER_SIZE];
+    uint8_t Data_pot[TRANSMIT_BUFFER_SIZE];
     
 #endif
 

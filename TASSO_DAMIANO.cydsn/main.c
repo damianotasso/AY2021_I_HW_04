@@ -22,13 +22,24 @@ int main(void)
     
     isr_ADC_StartEx(TIMER_ISR);
     isr_UART_StartEx(UART_RX_ISR);
-
+    
+    Data_photo[0] = HEADER;
+    Data_photo[TRANSMIT_BUFFER_SIZE - 1] = TAIL;
+    Data_pot[0] = HEADER;
+    Data_pot[TRANSMIT_BUFFER_SIZE - 1] = TAIL;
+    
     for(;;)
     {
-        if(flag == 1)
+        if(flag_photo == 1)
         {
-            UART_PutString(DataBuffer);
-            flag = 0;
+            UART_PutArray(Data_photo, TRANSMIT_BUFFER_SIZE);
+            if(flag_pot == 1)
+            {
+                UART_PutArray(Data_pot, TRANSMIT_BUFFER_SIZE);
+                flag_pot = 0;
+            }
+            
+            flag_photo = 0;
         }
     }
 }

@@ -14,13 +14,35 @@
 CY_ISR(TIMER_ISR)
 {
     Timer_ReadStatusRegister();
-    AMux_Select(PHOTORESISTOR);
-    value_digit_photo = ADC_DelSig_Read32();
-    if (value_digit_photo < 0) value_digit_photo = 0;
-    if (value_digit_photo > 65535) value_digit_photo = 65535;
-    sprintf(DataBuffer, "Sample: %ld mV\r\n", value_digit_photo);
-    
-    flag = 1;
+    if(flag_start == 1)
+    {
+        AMux_Select(PHOTORESISTOR);
+        value_photo = ADC_DelSig_Read32();
+        if (value_photo < 0) value_photo = 0;
+        if (value_photo > 65535) value_photo = 65535;
+        Data_photo[1] = value_photo >> 8;
+        Data_photo[2] = value_photo & 0xFF;
+        
+        if(value_photo <= THRESHOLD)
+        {
+            pin_LED_Write(1);
+            PWM_Led_Start();
+            AMux_Select(POTENTIOMETER);
+            value_pot = ADC_DelSig_Read32();
+            if (value_pot < 0) value_pot = 0;
+            if (value_pot > 65535) value_pot = 65535;
+            PWM_Led_WriteCompare(value_pot);
+            Data_pot[1] = value_pot >> 8;
+            Data_pot[2] = value_pot & 0xFF;
+            flag_pot = 1;
+        }
+        else
+        {
+            pin_LED_Write(0);
+            PWM_Led_Stop();
+            flag_photo = 1;
+        }
+    }
 }
 
 CY_ISR(UART_RX_ISR)
@@ -31,13 +53,13 @@ CY_ISR(UART_RX_ISR)
     {
         case 'B':
         case 'b':
-            flag = 1;
+            flag_start = 1;
             Pin_BluLed_Write(1);
             Timer_Start();
             break;
         case 'S':
         case 's':
-            flag = 0;
+            flag_start = 0;
             Pin_BluLed_Write(0);
             Timer_Stop();
             break;
