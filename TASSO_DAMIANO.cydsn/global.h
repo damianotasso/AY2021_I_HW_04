@@ -1,33 +1,45 @@
-/* ========================================
+/* ==============================================================================================================================
+ * Damiano Tasso 944232
  *
- * Copyright YOUR COMPANY, THE YEAR
- * All Rights Reserved
- * UNPUBLISHED, LICENSED SOFTWARE.
- *
- * CONFIDENTIAL AND PROPRIETARY INFORMATION
- * WHICH IS THE PROPERTY OF your company.
- *
- * ========================================
+ * Declaration of global variables used:
+ * - HIGH: high state 
+ * - LOW: low state
+ * - POTENTIOMETER: correspond to the Mux channel value that selects the Potentiometer as active signal to sample
+ * - PHOTORESISTOR: correspond to the Mux channel value that selects the Photoresistor as active signal to sample
+ * - FSR: (Full Scale Range) maximum value of the dynamic range sampled.
+ * - THRESHOLD: value choosen to distinguish light/dark in the room.
+ * - BYTE_TO_SEND: Number of bytes to send by the UART
+ * - TRANSMIT_BUFFER_SIZE: correspond to the size of the string trasmitted which is equal to the BYTE_TO_SEND + 2 (HEADER & TAIL)
+ * - HEADER & TAIL: byte wich compose the complete frame to trasmit
+ * 
+ * - value_photoresist: value smapled by the photoresistor
+ * - value_potentiometer: value sampled by the potentiometer
+ * - received: char received by the UART
+ * - flag_rx_tx: this flag is HIGH when the received_photoresist and received_potentiometer are saved and are ready to be sent 
+ * - flag_start: this flag is HIGH when the right char are received and the sampling start
+ * - Data[]: is a vector of TRANSMIT_BUFFER_SIZE size used to save the bytes to send  
+ * 
+ * ==============================================================================================================================
 */
 #ifndef __GLOBAL_H__
     #define __GLOBAL_H__
     
     #include "project.h"
     
+    #define HIGH 1
+    #define LOW 0
     #define POTENTIOMETER 0
     #define PHOTORESISTOR 1
     #define FSR 65535
-    #define THRESHOLD 0.5*FSR 
+    #define THRESHOLD 0.3*FSR 
     #define BYTE_TO_SEND 4
     #define TRANSMIT_BUFFER_SIZE 1+BYTE_TO_SEND+1
     #define HEADER 0xA0
     #define TAIL 0xC0
     
-    int32 value_photo;
-    int32 value_pot;
+    int32 value_photoresist;
+    int32 value_potentiometer;
     uint8_t received;
-    //volatile uint8_t flag_photo;
-    //volatile uint8_t flag_pot;
     volatile uint8_t flag_rx_tx;
     volatile uint8_t flag_start;
     uint8_t Data[TRANSMIT_BUFFER_SIZE];

@@ -1,13 +1,10 @@
-/* ========================================
- *
- * Copyright YOUR COMPANY, THE YEAR
- * All Rights Reserved
- * UNPUBLISHED, LICENSED SOFTWARE.
- *
- * CONFIDENTIAL AND PROPRIETARY INFORMATION
- * WHICH IS THE PROPERTY OF your company.
- *
- * ========================================
+/* ================================================================================================================================================
+ * Damiano Tasso 944232
+ * 
+ * In the main() there is only the activation of the ADC, UART, TIMER_ISR and UART_RX_ISR. 
+ * There is also the definition of the HEADER and TAIL in the Data[] frame. 
+ * In the infinite loop, instead, there is the sanding of the dataframe, with UART_PutArray(), only if the flag_rx_tx is HIGH, set by the sampling.
+ * ================================================================================================================================================
 */
 #include "project.h"
 #include "global.h"
@@ -28,10 +25,10 @@ int main(void)
     
     for(;;)
     {
-        if(flag_rx_tx == 1)
+        if(flag_rx_tx == HIGH)
         {
             UART_PutArray(Data, TRANSMIT_BUFFER_SIZE);
-            flag_rx_tx = 0;
+            flag_rx_tx = LOW;
         }
     }
 }

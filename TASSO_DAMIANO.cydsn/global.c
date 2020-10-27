@@ -1,21 +1,15 @@
 /* ========================================
- *
- * Copyright YOUR COMPANY, THE YEAR
- * All Rights Reserved
- * UNPUBLISHED, LICENSED SOFTWARE.
- *
- * CONFIDENTIAL AND PROPRIETARY INFORMATION
- * WHICH IS THE PROPERTY OF your company.
- *
+ * Damiano Tasso 944232
+ * 
+ * Initialization of the global variables 
  * ========================================
 */
 #include "global.h"
 
-
-int32 value_photo = 0;
-int32 value_pot = 0;
-uint8_t received = 0;
+int32 value_photoresist = 0;
+int32 value_potentiometer = 0;
+uint8_t received;
 volatile uint8_t flag_rx_tx;
-volatile uint8_t flag_start = 0;
+volatile uint8_t flag_start;
 
 /* [] END OF FILE */
