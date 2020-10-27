@@ -31,7 +31,7 @@
     #define POTENTIOMETER 0
     #define PHOTORESISTOR 1
     #define FSR 65535
-    #define THRESHOLD 0.3*FSR 
+    #define THRESHOLD 0.5*FSR 
     #define BYTE_TO_SEND 4
     #define TRANSMIT_BUFFER_SIZE 1+BYTE_TO_SEND+1
     #define HEADER 0xA0
