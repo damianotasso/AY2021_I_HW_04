@@ -20,8 +20,8 @@ CY_ISR(TIMER_ISR)
         value_photo = ADC_DelSig_Read32();
         if (value_photo < 0) value_photo = 0;
         if (value_photo > 65535) value_photo = 65535;
-        Data_photo[1] = value_photo >> 8;
-        Data_photo[2] = value_photo & 0xFF;
+        Data[1] = value_photo >> 8;
+        Data[2] = value_photo & 0xFF;
         
         if(value_photo <= THRESHOLD)
         {
@@ -32,16 +32,15 @@ CY_ISR(TIMER_ISR)
             if (value_pot < 0) value_pot = 0;
             if (value_pot > 65535) value_pot = 65535;
             PWM_Led_WriteCompare(value_pot);
-            Data_pot[1] = value_pot >> 8;
-            Data_pot[2] = value_pot & 0xFF;
-            flag_pot = 1;
+            Data[3] = value_pot >> 8;
+            Data[4] = value_pot & 0xFF;
         }
         else
         {
             pin_LED_Write(0);
             PWM_Led_Stop();
-            flag_photo = 1;
         }
+        flag_rx_tx = 1;
     }
 }
 
