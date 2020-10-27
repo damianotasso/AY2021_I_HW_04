@@ -18,33 +18,94 @@
 CY_ISR(TIMER_ISR)
 {
     Timer_ReadStatusRegister();
+    
+    if(flag_dark == HIGH)
+    { 
+        count_deb_d ++;
+    }
+    if(flag_light == HIGH)
+    {
+        count_deb_l ++;
+    }
+    
     if(flag_start == HIGH)
     {
+        count_timer ++; 
+        
         AMux_Select(PHOTORESISTOR);
         value_photoresist = ADC_DelSig_Read32();
         if (value_photoresist < 0) value_photoresist = 0;
         if (value_photoresist > 65535) value_photoresist = 65535;
-        Data[1] = value_photoresist >> 8;
-        Data[2] = value_photoresist & 0xFF;
+        sum_value_photoresist = sum_value_photoresist + value_photoresist;
         
         AMux_Select(POTENTIOMETER);
         value_potentiometer = ADC_DelSig_Read32();
         if (value_potentiometer < 0) value_potentiometer = 0;
         if (value_potentiometer > 65535) value_potentiometer = 65535;
-        Data[3] = value_potentiometer >> 8;
-        Data[4] = value_potentiometer & 0xFF;
+        sum_value_potentiometer = sum_value_potentiometer + value_potentiometer;
         
-        if(value_photoresist <= THRESHOLD)
+        if(count_timer == 100)
         {
-            LED_Start();
-            LED_DriveIntensity(value_potentiometer);
+            count_timer = 0;
+            avg_value_photoresist = sum_value_photoresist/100;
+            avg_value_potentiometer = sum_value_potentiometer/100;
+            
+            Data[3] = avg_value_potentiometer >> 8;
+            Data[4] = avg_value_potentiometer & 0xFF;
+             
+            
+            if(avg_value_photoresist <= THRESHOLD)
+            {
+                flag_dark = HIGH;
+                flag_light = LOW;
+                
+                if(count_deb_d == 1000)
+                {
+                    count_deb_d = 0;
+                    flag = HIGH;
+                }
+                
+                if(flag == HIGH)
+                {
+                    Data[1] = avg_value_photoresist >> 8;
+                    Data[2] = avg_value_photoresist & 0xFF;
+                    
+                    LED_Start();
+                    LED_DriveIntensity(avg_value_potentiometer);
+                    avg_value_photoresist = 0;
+                    sum_value_photoresist = 0;
+                }
+            }
+            else
+            {
+                flag_light = HIGH;
+                flag_dark = LOW;
+                
+                if(count_deb_l == 1000)
+                {
+                    count_deb_l = 0;
+                    flag1 = HIGH;
+                }
+                
+                if(flag1 == HIGH)
+                {
+                    LED_Stop();
+                
+                    Data[1] = avg_value_photoresist >> 8;
+                    Data[2] = avg_value_photoresist & 0xFF;
+                       
+                    avg_value_photoresist = 0;
+                    sum_value_photoresist = 0;
+                    
+                    flag = LOW;
+                    flag_dark = LOW;
+                }
+            }
+            
+            avg_value_potentiometer = 0;
+            sum_value_potentiometer = 0;
+            flag_rx_tx = HIGH;
         }
-        else
-        {
-            LED_Stop();
-        }
-        
-        flag_rx_tx = HIGH;
     }
 }
 

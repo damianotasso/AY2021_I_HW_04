@@ -31,17 +31,30 @@
     #define POTENTIOMETER 0
     #define PHOTORESISTOR 1
     #define FSR 65535
-    #define THRESHOLD 0.5*FSR 
+    #define THRESHOLD 0.6*FSR 
+    #define DEBOUNCE_TH_HIGH THRESHOLD + THRESHOLD*0.1 
+    #define DEBOUNCE_TH_LOW THRESHOLD + THRESHOLD*0.1
     #define BYTE_TO_SEND 4
     #define TRANSMIT_BUFFER_SIZE 1+BYTE_TO_SEND+1
     #define HEADER 0xA0
     #define TAIL 0xC0
     
     int32 value_photoresist;
+    int32 sum_value_photoresist;
+    int32 avg_value_photoresist;
     int32 value_potentiometer;
+    int32 sum_value_potentiometer;
+    int32 avg_value_potentiometer;
     uint8_t received;
+    uint8_t count_timer;
+    uint16_t count_deb_d;
+    uint16_t count_deb_l;
     volatile uint8_t flag_rx_tx;
     volatile uint8_t flag_start;
+    volatile uint8_t flag_dark;
+    volatile uint8_t flag_light;
+    volatile uint8_t flag;
+    volatile uint8_t flag1;
     uint8_t Data[TRANSMIT_BUFFER_SIZE];
     
 #endif
