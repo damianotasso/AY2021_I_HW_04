@@ -1,14 +1,15 @@
-/* ================================================================================================================================================
+/* =================================================================================================================================================
  * Damiano Tasso 944232
  * 
- * In the main() there is only the activation of the ADC, UART, TIMER_ISR and UART_RX_ISR. 
+ * In the main() there is the activation of the ADC, UART, TIMER_ISR and UART_RX_ISR. 
  * There is also the definition of the HEADER and TAIL in the Data[] frame. 
- * In the infinite loop, instead, there is the sanding of the dataframe, with UART_PutArray(), only if the flag_rx_tx is HIGH, set by the sampling.
- * ================================================================================================================================================
+ * In the infinite loop, instead, there is the sanding of the dataframe, with UART_PutArray(), only if the flag_rx_tx is HIGH, set by the interrupt.
+ * =================================================================================================================================================
 */
 #include "project.h"
 #include "global.h"
 #include "InterruptRoutines.h"
+#include "LedDriver.h"
 
 int main(void)
 {

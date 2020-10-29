@@ -1,13 +1,8 @@
-/* ========================================
- *
- * Copyright YOUR COMPANY, THE YEAR
- * All Rights Reserved
- * UNPUBLISHED, LICENSED SOFTWARE.
- *
- * CONFIDENTIAL AND PROPRIETARY INFORMATION
- * WHICH IS THE PROPERTY OF your company.
- *
- * ========================================
+/* ===================================================================
+ * Damiano Tasso 944232
+ * 
+ * Implementation of the function defined in the corresponding .h file
+ * ===================================================================
 */
 #include "LedDriver.h"
 
